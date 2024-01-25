@@ -8,7 +8,9 @@ setuptools.setup(
     author="kaonmir",
     author_email="sonjeff@naver.com",
     description="Make all DevOps experience better",
-    url="https://github.com/kaonmir/dox-cli",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    url="https://github.com/kaonmir/dox",
     packages=setuptools.find_packages(),
     classifiers=[
         # 패키지에 대한 태그
