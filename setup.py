@@ -1,16 +1,21 @@
 import setuptools
+from pathlib import Path
 
+
+# read the contents of your README file
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
-    name="dox",
+    name="dox-cli",
     version="0.0.1",
     license="MIT",
     author="kaonmir",
     author_email="sonjeff@naver.com",
     description="Make all DevOps experience better",
-    long_description=open("README.md").read(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kaonmir/dox",
+    url="https://github.com/kaonmir/dox-cli",
     packages=setuptools.find_packages(),
     classifiers=[
         # 패키지에 대한 태그
