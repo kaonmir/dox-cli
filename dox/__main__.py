@@ -1,4 +1,4 @@
 import sys
-from .cli import cli
+from .cmd import cli
 
 sys.exit(cli())

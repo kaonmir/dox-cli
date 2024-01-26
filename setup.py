@@ -24,5 +24,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=open("requirements.txt").read().splitlines(),
-    entry_points={"console_scripts": ["dox = dox.cli:cli"]},
+    entry_points={"console_scripts": ["dox = dox.cmd:cli"]},
 )
