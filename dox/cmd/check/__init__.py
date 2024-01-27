@@ -9,9 +9,7 @@ def check():
 
 from .network import network
 from .hardware import hardware
-from .list_project import list_project
 
 
 check.add_command(network)
 check.add_command(hardware)
-check.add_command(list_project)
