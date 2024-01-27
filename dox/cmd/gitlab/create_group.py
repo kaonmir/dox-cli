@@ -1,0 +1,122 @@
+import click
+import os
+import pathlib
+from dox.utils.gitlab import load_gitlab
+from dox.utils.helpers import open_structured_file
+from dox.cmd.gitlab.helper.path_regex import GitlabPathRegex
+from gitlab.exceptions import GitlabCreateError
+import re
+
+
+def iter_groups(root, namespace=[]):
+    for root_name, children in root.items():
+        if not match_group_route_regex(root_name):
+            raise click.ClickException(f"Group name {root_name} is not valid. Please check the group name")
+
+        namespace.append(root_name)
+        if isinstance(children, dict):
+            # root has children groups
+            yield namespace
+            yield from iter_groups(children, namespace)
+        elif children == None:
+            # root has no children
+            yield namespace
+        else:
+            raise click.ClickException("groups yaml is not allowed to have list")
+
+        namespace.pop()
+
+
+def match_group_route_regex(group_name):
+    r = "(?:[a-zA-Z0-9_\.][a-zA-Z0-9_\-\.]{0,38})"
+    return re.fullmatch(r, group_name) is not None
+    # return ValueError(f"Group name {group_name} is not valid. Please check the group name")
+
+
+def match_full_namespace_format_regex(name):
+    r = r"(?:(?:[a-zA-Z0-9_\.][a-zA-Z0-9_\-\.]{0,38}[a-zA-Z0-9_\-]|[a-zA-Z0-9_])\/){0,20}(?:[a-zA-Z0-9_\.][a-zA-Z0-9_\-\.]{0,38}[a-zA-Z0-9_\-]|[a-zA-Z0-9_])"
+    return re.fullmatch(r, name) is not None
+
+
+@click.option(
+    "--gitlab-url",
+    default="https://gitlab.com",
+    help="Gitlab URL",
+    envvar="GITLAB_URL",
+)
+@click.option(
+    "--gitlab-private-token",
+    help="Gitlab private token",
+    envvar="GITLAB_PRIVATE_TOKEN",
+    prompt=True,
+    required=True,
+)
+@click.option(
+    "--file",
+    "-f",
+    help="File path to create group hierarchy",  # TODO sample file 주소
+    envvar="GROUP_FILE",
+    prompt=True,
+    required=True,
+)
+@click.command()
+def create_group(gitlab_url, gitlab_private_token, file):
+    """Create a new group
+
+    \b
+    you can create a group hierarchy by using a yaml file.
+    group always starts with root group and ends with null.
+
+    \b
+    root_group:
+      sub_group:
+        sub_sub_group: null
+    """
+
+    groups = open_structured_file(file)
+    if groups == None:
+        raise ValueError(f"File {file} is empty")
+
+    gl = load_gitlab(gitlab_url, gitlab_private_token)
+
+    for namespace in iter_groups(groups):
+        namespace_str = "/".join(namespace)
+        try:
+            group = gl.groups.get(namespace_str)
+            # Group exists
+            click.echo(f"exist: {namespace_str}")
+        except Exception as e:
+            # Group does not exist
+            try:
+                if len(namespace) == 1:
+                    # Create root group
+                    group = gl.groups.create({"name": namespace[-1], "path": namespace[-1]})
+                else:
+                    # create sub group
+                    parent_group = gl.groups.get("/".join(namespace[:-1]))
+                    group = gl.groups.create(
+                        {
+                            "parent_id": parent_group.id,
+                            "name": namespace[-1],
+                            "path": namespace[-1],
+                        }
+                    )
+                    click.echo(f"created: {namespace_str}")
+
+            except GitlabCreateError as e:
+                raise click.ClickException(
+                    f"Group name {namespace[-1]} is already taken by someone. Please check the group name"
+                )
+            except Exception as e:
+                raise click.ClickException(f"Group creation failed. {e}")
+
+
+# return value is namespaces and is_group
+if __name__ == "__main__":
+    create_group(["--file", "./test/group.yml"])
+
+    # path_regex = GitlabPathRegex()
+    # print(path_regex.FULL_NAMESPACE_FORMAT_REGEX)
+
+    # for group in iter_groups(open_structured_file("./test/group.yml")):
+    #     print(group)

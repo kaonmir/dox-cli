@@ -9,6 +9,7 @@ import click
 #         click.echo(f"Hello {name}!")
 
 from .check import check
+from .gitlab import gitlab
 
 
 @click.group()
@@ -17,3 +18,4 @@ def cli():
 
 
 cli.add_command(check)
+cli.add_command(gitlab)

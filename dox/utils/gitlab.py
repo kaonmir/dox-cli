@@ -21,6 +21,6 @@ def load_gitlab(GITLAB_URL, GITLAB_PRIVATE_TOKEN):
     gl = gitlab.Gitlab(GITLAB_URL, GITLAB_PRIVATE_TOKEN)
     gl.auth()
 
-    print(f"You are logged in as {gl.user.name} ({gl.user.username}) in {gl.url}")
+    # print(f"You are logged in as {gl.user.name} ({gl.user.username}) in {gl.url}")
 
     return gl
