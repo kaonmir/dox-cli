@@ -3,7 +3,6 @@ import os
 import pathlib
 from dox.utils.gitlab import load_gitlab
 from dox.utils.helpers import open_structured_file
-from dox.cmd.gitlab.helper.path_regex import GitlabPathRegex
 from gitlab.exceptions import GitlabCreateError
 import re
 
