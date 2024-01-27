@@ -15,8 +15,7 @@ def toGB(x):
 def open_structured_file(file):
     file = os.path.abspath(file)
     if not os.path.exists(file):
-        click.echo(f"File {file} does not exist")
-        exit(1)
+        raise click.ClickException(f"File {file} does not exist")
 
     file_type = file.split(".")[-1]
     if file_type == "yaml" or file_type == "yml":
@@ -24,17 +23,12 @@ def open_structured_file(file):
             with open(file) as f:
                 return yaml.safe_load(f)
         except yaml.YAMLError as e:
-            click.echo(f"File {file} is not a valid yaml file")
-            click.echo(e)
-            exit(1)
+            click.ClickException(f"File {file} is not a valid yaml file")
     elif file_type == "json":
         try:
             with open(file) as f:
                 return json.load(f)
         except json.JSONDecodeError as e:
-            click.echo(f"File {file} is not a valid json file")
-            click.echo(e)
-            exit(1)
+            click.ClickException(f"File {file} is not a valid json file")
     else:
-        click.echo(f"File {file} is not supported")
-        exit(1)
+        click.ClickException(f"File {file} is not a valid yaml or json file")

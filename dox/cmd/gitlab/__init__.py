@@ -3,7 +3,7 @@ import click
 
 @click.group()
 def gitlab():
-    """Check the current directory for documentation errors"""
+    """Gitlab commands"""
     pass
 
 

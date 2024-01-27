@@ -6,11 +6,9 @@ import requests
 
 def load_gitlab(GITLAB_URL, GITLAB_PRIVATE_TOKEN):
     if not GITLAB_URL:
-        click.echo("GITLAB_URL not set")
-        exit(1)
+        raise click.ClickException("GITLAB_URL not set")
     if not GITLAB_PRIVATE_TOKEN:
-        click.echo("GITLAB_PRIVATE_TOKEN not set")
-        exit(1)
+        raise click.ClickException("GITLAB_PRIVATE_TOKEN not set")
 
     try:
         timeout_duration = 2

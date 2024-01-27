@@ -40,27 +40,19 @@ def match_full_namespace_format_regex(name):
 @click.option(
     "--gitlab-url",
     default="https://gitlab.com",
-    help="Gitlab URL",
+    metavar="URL",
     envvar="GITLAB_URL",
 )
 @click.option(
     "--gitlab-private-token",
-    help="Gitlab private token",
     envvar="GITLAB_PRIVATE_TOKEN",
-    prompt=True,
+    metavar="TOKEN",
     required=True,
 )
-@click.option(
-    "--file",
-    "-f",
-    help="File path to create group hierarchy",  # TODO sample file 주소
-    envvar="GROUP_FILE",
-    prompt=True,
-    required=True,
-)
+@click.argument("filename", type=click.Path(exists=True, dir_okay=False, resolve_path=True))
 @click.command()
-def create_group(gitlab_url, gitlab_private_token, file):
-    """Create a new group
+def create_group(gitlab_url, gitlab_private_token, filename):
+    """Create bulk groups
 
     \b
     you can create a group hierarchy by using a yaml file.
@@ -72,9 +64,9 @@ def create_group(gitlab_url, gitlab_private_token, file):
         sub_sub_group: null
     """
 
-    groups = open_structured_file(file)
+    groups = open_structured_file(filename)
     if groups == None:
-        raise ValueError(f"File {file} is empty")
+        raise ValueError(f"File {filename} is empty")
 
     gl = load_gitlab(gitlab_url, gitlab_private_token)
 

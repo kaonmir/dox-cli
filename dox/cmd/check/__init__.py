@@ -3,7 +3,7 @@ import click
 
 @click.group()
 def check():
-    """Check the current directory for documentation errors"""
+    """Check commands"""
     pass
 
 
