@@ -30,7 +30,7 @@ def hardware():
     available_memory = mem.available
 
     # Disk Information (Disk Size)
-    disk = psutil.disk_usage("/")
+    disk = psutil.disk_usage("/")  # TODO: 환경변수로 특정 mountmoint를 지정할 수 있도록
     available_disk_size = disk.free
     total_disk_size = disk.total
 

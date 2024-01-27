@@ -57,17 +57,15 @@ def draw_hierarchy(tree, level, bar_status=[]):
 )
 @click.option(
     "--gitlab-url",
-    "-u",
     default="https://gitlab.com",
     help="Gitlab URL",
     envvar="GITLAB_URL",
 )
 @click.option(
     "--gitlab-private-token",
-    "-t",
-    default=None,
     help="Gitlab private token",
     envvar="GITLAB_PRIVATE_TOKEN",
+    prompt=True,
     required=True,
 )
 def list_project(output, membership, group, gitlab_url, gitlab_private_token):

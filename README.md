@@ -10,12 +10,46 @@ echo "rehash" >> ~/.zshrc
 ## Setup flags and arguments
 
 ```python
-r"""A parameter to a command comes in two versions: they are either
-    :class:`Option`\s or :class:`Argument`\s.  Other subclasses are currently
-    not supported by design as some of the internals for parsing are
-    intentionally not finalized.
+r"""
+    :param show_default: Show the default value for this option in its
+        help text. Values are not shown by default, unless
+        :attr:`Context.show_default` is ``True``. If this value is a
+        string, it shows that string in parentheses instead of the
+        actual value. This is particularly useful for dynamic options.
+        For single option boolean flags, the default remains hidden if
+        its value is ``False``.
+    :param show_envvar: Controls if an environment variable should be
+        shown on the help page. Normally, environment variables are not
+        shown.
+    :param prompt: If set to ``True`` or a non empty string then the
+        user will be prompted for input. If set to ``True`` the prompt
+        will be the option name capitalized.
+    :param confirmation_prompt: Prompt a second time to confirm the
+        value if it was prompted for. Can be set to a string instead of
+        ``True`` to customize the message.
+    :param prompt_required: If set to ``False``, the user will be
+        prompted for input only when the option was specified as a flag
+        without a value.
+    :param hide_input: If this is ``True`` then the input on the prompt
+        will be hidden from the user. This is useful for password input.
+    :param is_flag: forces this option to act as a flag.  The default is
+                    auto detection.
+    :param flag_value: which value should be used for this flag if it's
+                       enabled.  This is set to a boolean automatically if
+                       the option string contains a slash to mark two options.
+    :param multiple: if this is set to `True` then the argument is accepted
+                     multiple times and recorded.  This is similar to ``nargs``
+                     in how it works but supports arbitrary number of
+                     arguments.
+    :param count: this flag makes an option increment an integer.
+    :param allow_from_autoenv: if this is enabled then the value of this
+                               parameter will be pulled from an environment
+                               variable in case a prefix is defined on the
+                               context.
+    :param help: the help string.
+    :param hidden: hide this option from help outputs.
+    :param attrs: Other command arguments described in :class:`Parameter`.
 
-    Some settings are supported by both options and arguments.
 
     :param param_decls: the parameter declarations for this option or
                         argument.  This is a list of flags or argument
@@ -50,4 +84,5 @@ r"""A parameter to a command comes in two versions: they are either
         given. Takes ``ctx, param, incomplete`` and must return a list
         of :class:`~click.shell_completion.CompletionItem` or a list of
         strings.
+
 ```
