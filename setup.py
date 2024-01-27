@@ -8,7 +8,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="dox-cli",
-    version="0.0.6",
+    version="0.0.7",  # TODO: 태그 걸면 배포되도록 수정
     license="MIT",
     author="kaonmir",
     author_email="sonjeff@naver.com",
