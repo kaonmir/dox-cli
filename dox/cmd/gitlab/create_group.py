@@ -1,6 +1,4 @@
 import click
-import os
-import pathlib
 from dox.utils.gitlab import load_gitlab
 from dox.utils.helpers import open_structured_file
 from gitlab.exceptions import GitlabCreateError
@@ -55,8 +53,11 @@ def create_group(gitlab_url, gitlab_private_token, filename):
     """Create bulk groups
 
     \b
-    you can create a group hierarchy by using a yaml file.
-    group always starts with root group and ends with null.
+    You can create a group hierarchy by using a yaml file.
+    Group always starts with root group and ends with null.
+
+    \b
+    Example yaml file:
 
     \b
     root_group:
@@ -81,6 +82,10 @@ def create_group(gitlab_url, gitlab_private_token, filename):
             try:
                 if len(namespace) == 1:
                     # Create root group
+                    if gitlab_url == "https://gitlab.com":
+                        raise click.ClickException(
+                            f"Root group can not be created programmatically in gitlab.com. Please create root group manually."
+                        )
                     group = gl.groups.create({"name": namespace[-1], "path": namespace[-1]})
                 else:
                     # create sub group
@@ -92,11 +97,11 @@ def create_group(gitlab_url, gitlab_private_token, filename):
                             "path": namespace[-1],
                         }
                     )
-                    click.echo(f"created: {namespace_str}")
+                click.echo(f"created: {namespace_str}")
 
             except GitlabCreateError as e:
                 raise click.ClickException(
-                    f"Group name {namespace[-1]} is already taken by someone. Please check the group name"
+                    f"Group name {namespace[-1]} may already be taken by someone. Or you may not have permission to create group {namespace_str}"
                 )
             except Exception as e:
                 raise click.ClickException(f"Group creation failed. {e}")
@@ -104,7 +109,7 @@ def create_group(gitlab_url, gitlab_private_token, filename):
 
 # return value is namespaces and is_group
 if __name__ == "__main__":
-    create_group(["--file", "./test/group.yml"])
+    create_group(["./test/group.yml"])
 
     # path_regex = GitlabPathRegex()
     # print(path_regex.FULL_NAMESPACE_FORMAT_REGEX)
