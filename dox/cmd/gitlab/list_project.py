@@ -1,6 +1,5 @@
 import click
-import os
-from ...utils.gitlab import load_gitlab
+from dox.utils.gitlab import load_gitlab
 
 
 def add_hierarchy(root, namespaces):

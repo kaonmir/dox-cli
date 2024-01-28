@@ -12,7 +12,11 @@
       "console": "integratedTerminal",
       "justMyCode": true,
       "envFile": "${workspaceFolder}/.env",
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "python": "${command:python.interpreterPath}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}" // 절대 경로로 import할 수 있도록 지원
+      }
     }
   ]
 }

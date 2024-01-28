@@ -1,6 +1,6 @@
 import click
 import psutil
-from ...utils.helpers import *
+from dox.utils.helpers import *
 
 import platform
 from socket import socket, AF_INET, SOCK_DGRAM
