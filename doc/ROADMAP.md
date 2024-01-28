@@ -1,7 +1,7 @@
 # Roadmap
 
-- Group, SubGroup 자동생성
-- Group, SubGroup - Cleanup Policy
+- [x] Group, SubGroup 자동생성
+- [x] Group, SubGroup - Cleanup Policy => Admin 옵션으로 이미 있음
 
 - SVN to Git Migration (users.txt, projects.txt)
 - docker-compose.yml 생성
@@ -12,4 +12,3 @@
 dox setup ldap
 
 Monit docker-compose.yml
-

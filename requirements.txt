@@ -6,3 +6,4 @@ python-gitlab
 psutil
 requests
 PyYAML
+tabulate
